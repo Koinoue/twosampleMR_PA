@@ -1,0 +1,207 @@
+
+###################################################################################
+##Code from MRBase
+library(TwoSampleMR)
+ao <- available_outcomes()
+
+##Asian
+exposure_dat_jpn <- read_exposure_data(
+  #filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.SNVonly.pa_all.jp.txt',
+  filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.pa_all.bp_cond.jp.txt',
+  sep = ' ',
+  snp_col = 'POS',
+  beta_col = 'BETA',
+  se_col = 'SE',
+  effect_allele_col = 'Allele2',
+  phenotype_col = 'Phenotype',
+  units_col = 'units',
+  other_allele_col = 'other_allele',
+  eaf_col = 'eaf',
+  samplesize_col = 'samplesize',
+  ncase_col = 'ncase',
+  ncontrol_col = 'ncontrol',
+  gene_col = 'gene',
+  pval_col = 'pval'
+)
+outcome_dat_jpn <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-159','bbj-a-109','bbj-a-129'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+dat <- harmonise_data(exposure_dat_jpn, outcome_dat_jpn, action = 1)
+mr_results <- mr(dat)
+mr_results
+generate_odds_ratios(mr_results)
+mr_pleiotropy_test(dat)
+run_mr_presso(dat)
+
+
+##European
+exposure_dat_eu <- read_exposure_data(
+  filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.SNVonly.pa_all.meta_eur.txt',
+  sep = '\t',
+  snp_col = 'MarkerName',
+  beta_col = 'Effect',
+  se_col = 'StdErr',
+  effect_allele_col = 'Allele1',
+  phenotype_col = 'Phenotype',
+  units_col = 'units',
+  other_allele_col = 'other_allele',
+  eaf_col = 'eaf',
+  samplesize_col = 'samplesize',
+  ncase_col = 'ncase',
+  ncontrol_col = 'ncontrol',
+  gene_col = 'gene',
+  pval_col = 'pval'
+)
+#outcome_dat_eu <- extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_CHD','finn-b-I9_HEARTFAIL_NS','finn-b-I9_STR_EXNONE'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+#outcome_dat_eu <- extract_outcome_data(exposure_dat_eu$SNP, c('ieu-a-9','ieu-a-7','ebi-a-GCST000998', 'ieu-a-8','ieu-a-6','ukb-d-I9_CHD'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+outcome_dat_eu_cad <- read_outcome_data(
+  filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.cad.eur.finngen.txt',
+  sep = '\t',
+  snp_col = 'MarkerName',
+  beta_col = 'Effect',
+  se_col = 'StdErr',
+  effect_allele_col = 'Allele1',
+  phenotype_col = 'Phenotype',
+  units_col = 'units',
+  other_allele_col = 'other_allele',
+  eaf_col = 'eaf',
+  samplesize_col = 'samplesize',
+  ncase_col = 'ncase',
+  ncontrol_col = 'ncontrol',
+  gene_col = 'gene',
+  pval_col = 'pval'
+)
+outcome_dat_eu_cad$outcome<-"Coronary artery disease"
+
+outcome_dat_eu_chf<- read_outcome_data(
+  filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.chf.eur.finngen.txt',
+  sep = '\t',
+  snp_col = 'MarkerName',
+  beta_col = 'Effect',
+  se_col = 'StdErr',
+  effect_allele_col = 'Allele1',
+  phenotype_col = 'Phenotype',
+  units_col = 'units',
+  other_allele_col = 'other_allele',
+  eaf_col = 'eaf',
+  samplesize_col = 'samplesize',
+  ncase_col = 'ncase',
+  ncontrol_col = 'ncontrol',
+  gene_col = 'gene',
+  pval_col = 'pval'
+)
+outcome_dat_eu_chf$outcome<-"Congestive heart failure"
+
+outcome_dat_eu_stroke <- read_outcome_data(
+  filename = 'C:/Users/blueb/Dropbox (Naoki Kondo Lab)/temp0908/Naito/MR/update/leadvariants_meta_all_r7.stroke.eur.finngen.txt',
+  sep = '\t',
+  snp_col = 'MarkerName',
+  beta_col = 'Effect',
+  se_col = 'StdErr',
+  effect_allele_col = 'Allele1',
+  phenotype_col = 'Phenotype',
+  units_col = 'units',
+  other_allele_col = 'other_allele',
+  eaf_col = 'eaf',
+  samplesize_col = 'samplesize',
+  ncase_col = 'ncase',
+  ncontrol_col = 'ncontrol',
+  gene_col = 'gene',
+  pval_col = 'pval'
+)
+outcome_dat_eu_stroke$outcome<-"stroke"
+
+outcome_dat_eu<-rbind(outcome_dat_eu_cad, outcome_dat_eu_chf, outcome_dat_eu_stroke)
+dat <- harmonise_data(exposure_dat_eu, outcome_dat_eu, action = 1)
+mr_results <- mr(dat)
+mr_results
+generate_odds_ratios(mr_results)
+mr_pleiotropy_test(dat)
+run_mr_presso(dat)
+
+
+##Graph
+#install.packages("gridExtra")
+library(gridExtra)
+library(ggplot2)
+outcome_dat1 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-159'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+outcome_dat2 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-109'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+outcome_dat3 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-129'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+dat1 <- harmonise_data(exposure_dat_jpn, outcome_dat1, action = 1)
+res1 <- mr(dat1, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+dat2 <- harmonise_data(exposure_dat_jpn, outcome_dat2, action = 1)
+res2 <- mr(dat2, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+dat3 <- harmonise_data(exposure_dat_jpn, outcome_dat3, action = 1)
+res3 <- mr(dat3, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+
+outcome_dat4 <- outcome_dat_eu_cad
+  #extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_CHD'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+outcome_dat5 <- outcome_dat_eu_chf
+#extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_HEARTFAIL_NS'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+outcome_dat6 <- outcome_dat_eu_stroke
+#extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_STR_EXNONE'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
+dat4 <- harmonise_data(exposure_dat_eu, outcome_dat4, action = 1)
+res4 <- mr(dat4, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+dat5 <- harmonise_data(exposure_dat_eu, outcome_dat5, action = 1)
+res5 <- mr(dat5, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+dat6 <- harmonise_data(exposure_dat_eu, outcome_dat6, action = 1)
+res6 <- mr(dat6, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
+p1 <- mr_scatter_plot(res1, dat1)
+p2 <- mr_scatter_plot(res2, dat2)
+p3 <- mr_scatter_plot(res3, dat3 )
+p4 <- mr_scatter_plot(res4, dat4 )
+p5 <- mr_scatter_plot(res5, dat5 )
+p6 <- mr_scatter_plot(res6, dat6 )
+grid.arrange(p1[[1]]+ ggtitle("A: Coronary artery disease (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p2[[1]]+ ggtitle("B: Congestive heart failure (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p3[[1]]+ ggtitle("C: Stroke (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p4[[1]]+ ggtitle("D: Coronary artery disease (European)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p5[[1]]+ ggtitle("E: Congestive heart failure (European)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p6[[1]]+ ggtitle("F: Stroke (European)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"),
+             ncol=3)
+
+#For hypertension
+grid.arrange(p1[[1]]+ ggtitle("A: Coronary artery disease (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p2[[1]]+ ggtitle("B: Congestive heart failure (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             p3[[1]]+ ggtitle("C: Stroke (East Aisan)") + labs(x = "SNP effect on exposure", y = "SNP effect on outcome"), 
+             ncol=3)
+
+#Leave-one-out
+res_loo1 <- mr_leaveoneout(dat1)
+pl1 <- mr_leaveoneout_plot(res_loo1)
+res_loo2 <- mr_leaveoneout(dat2)
+pl2 <- mr_leaveoneout_plot(res_loo2)
+res_loo3 <- mr_leaveoneout(dat3)
+pl3 <- mr_leaveoneout_plot(res_loo3)
+res_loo4 <- mr_leaveoneout(dat4)
+pl4 <- mr_leaveoneout_plot(res_loo4)
+res_loo5 <- mr_leaveoneout(dat5)
+pl5 <- mr_leaveoneout_plot(res_loo5)
+res_loo6 <- mr_leaveoneout(dat6)
+pl6 <- mr_leaveoneout_plot(res_loo6)
+grid.arrange(pl1[[1]]+ ggtitle("A: Coronary artery disease (East Aisan)") + labs(x = "MR leave-one-out analysis", y = ""), 
+             pl2[[1]]+ ggtitle("B: Congestive heart failure (East Aisan)") + labs(x = "MR leave-one-out analysis", y = ""), 
+             pl3[[1]]+ ggtitle("C: Stroke (East Aisan)") + labs(x = "MR leave-one-out analysis", y = ""), 
+             pl4[[1]]+ ggtitle("D: Coronary artery disease (European)") + labs(x = "MR leave-one-out analysis", y = ""), 
+             pl5[[1]]+ ggtitle("E: Congestive heart failure (European)") + labs(x = "MR leave-one-out analysis", y = ""), 
+             pl6[[1]]+ ggtitle("F: Stroke (European)") + labs(x = "MR leave-one-out analysis", y = ""),
+             ncol=3)
+
+#Single SNP analysis
+res_single1 <- mr_singlesnp(dat1, all_method = c("mr_ivw"))
+ps1 <- mr_forest_plot(res_single1)
+res_single2 <- mr_singlesnp(dat2, all_method = c("mr_ivw"))
+ps2 <- mr_forest_plot(res_single2)
+res_single3 <- mr_singlesnp(dat3, all_method = c("mr_ivw"))
+ps3 <- mr_forest_plot(res_single3)
+res_single4 <- mr_singlesnp(dat4, all_method = c("mr_ivw"))
+ps4 <- mr_forest_plot(res_single4)
+res_single5 <- mr_singlesnp(dat5, all_method = c("mr_ivw"))
+ps5 <- mr_forest_plot(res_single5)
+res_single6 <- mr_singlesnp(dat6, all_method = c("mr_ivw"))
+ps6 <- mr_forest_plot(res_single6)
+grid.arrange(ps1[[1]]+ ggtitle("A: Coronary artery disease (East Aisan)") + labs(x = "MR single SNP analysis", y = ""), 
+             ps2[[1]]+ ggtitle("B: Congestive heart failure (East Aisan)") + labs(x = "MR single SNP analysis", y = ""), 
+             ps3[[1]]+ ggtitle("C: Stroke (East Aisan)") + labs(x = "MR single SNP analysis", y = ""), 
+             ps4[[1]]+ ggtitle("D: Coronary artery disease (European)") + labs(x = "MR single SNP analysis", y = ""), 
+             ps5[[1]]+ ggtitle("E: Congestive heart failure (European)") + labs(x = "MR single SNP analysis", y = ""), 
+             ps6[[1]]+ ggtitle("F: Stroke (European)") + labs(x = "MR single SNP analysis", y = ""),
+             ncol=3)
