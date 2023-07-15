@@ -24,7 +24,7 @@ exposure_dat_jpn <- read_exposure_data(
   pval_col = 'pval'
 )
 outcome_dat_jpn <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-159','bbj-a-109','bbj-a-129'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
-dat <- harmonise_data(exposure_dat_jpn, outcome_dat_jpn, action = 1)
+dat <- harmonise_data(exposure_dat_jpn, outcome_dat_jpn, action = 2)
 mr_results <- mr(dat)
 mr_results
 generate_odds_ratios(mr_results)
@@ -110,7 +110,7 @@ outcome_dat_eu_stroke <- read_outcome_data(
 outcome_dat_eu_stroke$outcome<-"stroke"
 
 outcome_dat_eu<-rbind(outcome_dat_eu_cad, outcome_dat_eu_chf, outcome_dat_eu_stroke)
-dat <- harmonise_data(exposure_dat_eu, outcome_dat_eu, action = 1)
+dat <- harmonise_data(exposure_dat_eu, outcome_dat_eu, action = 2)
 mr_results <- mr(dat)
 mr_results
 generate_odds_ratios(mr_results)
@@ -125,11 +125,11 @@ library(ggplot2)
 outcome_dat1 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-159'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
 outcome_dat2 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-109'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
 outcome_dat3 <- extract_outcome_data(exposure_dat_jpn$SNP, c('bbj-a-129'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
-dat1 <- harmonise_data(exposure_dat_jpn, outcome_dat1, action = 1)
+dat1 <- harmonise_data(exposure_dat_jpn, outcome_dat1, action = 2)
 res1 <- mr(dat1, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
-dat2 <- harmonise_data(exposure_dat_jpn, outcome_dat2, action = 1)
+dat2 <- harmonise_data(exposure_dat_jpn, outcome_dat2, action = 2)
 res2 <- mr(dat2, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
-dat3 <- harmonise_data(exposure_dat_jpn, outcome_dat3, action = 1)
+dat3 <- harmonise_data(exposure_dat_jpn, outcome_dat3, action = 2)
 res3 <- mr(dat3, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
 
 outcome_dat4 <- outcome_dat_eu_cad
@@ -138,11 +138,11 @@ outcome_dat5 <- outcome_dat_eu_chf
 #extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_HEARTFAIL_NS'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
 outcome_dat6 <- outcome_dat_eu_stroke
 #extract_outcome_data(exposure_dat_eu$SNP, c('finn-b-I9_STR_EXNONE'), proxies = 1, rsq = 0.8, align_alleles = 1, palindromes = 1, maf_threshold = 0.3)
-dat4 <- harmonise_data(exposure_dat_eu, outcome_dat4, action = 1)
+dat4 <- harmonise_data(exposure_dat_eu, outcome_dat4, action = 2)
 res4 <- mr(dat4, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
-dat5 <- harmonise_data(exposure_dat_eu, outcome_dat5, action = 1)
+dat5 <- harmonise_data(exposure_dat_eu, outcome_dat5, action = 2)
 res5 <- mr(dat5, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
-dat6 <- harmonise_data(exposure_dat_eu, outcome_dat6, action = 1)
+dat6 <- harmonise_data(exposure_dat_eu, outcome_dat6, action = 2)
 res6 <- mr(dat6, method_list = c("mr_ivw", "mr_weighted_median", "mr_weighted_mode", "mr_egger_regression"))
 p1 <- mr_scatter_plot(res1, dat1)
 p2 <- mr_scatter_plot(res2, dat2)
